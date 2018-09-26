@@ -546,3 +546,5 @@
 1. github地址:https://github.com/wycm/selenium-geetest-crack
 2. 附上一张滑动效果图<br>
  ![image](http://upload-images.jianshu.io/upload_images/5830895-c30bebcdf6827ce6.gif?imageMogr2/auto-orient/strip)
+ 
+ 下载最新版本：[chromedriver](http://npm.taobao.org/mirrors/chromedriver/)

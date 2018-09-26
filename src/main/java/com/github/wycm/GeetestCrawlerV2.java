@@ -34,7 +34,7 @@ public class GeetestCrawlerV2 {
     static {
         System.setProperty("webdriver.chrome.driver", "/Users/wangyang/Downloads/chromedriver");
         if (System.getProperty("os.name").toLowerCase().contains("windows")){
-            System.setProperty("webdriver.chrome.driver", "D:\\dev\\selenium\\chromedriver_V2.30\\chromedriver_win32\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "D:\\chromedriver.exe");
         }
         driver = new ChromeDriver();
     }

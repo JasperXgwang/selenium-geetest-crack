@@ -47,16 +47,17 @@ public class TencentCrawler {
     private static ChromeDriver driver = null;
     static {
         System.setProperty("webdriver.chrome.driver", "/Users/wangyang/Downloads/chromedriver");
-        if (System.getProperty("os.name").toLowerCase().contains("windows")){
-            System.setProperty("webdriver.chrome.driver", "D:\\dev\\selenium\\chromedriver_V2.30\\chromedriver_win32\\chromedriver.exe");
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            System.setProperty("webdriver.chrome.driver", "D:\\chromedriver.exe");
         }
     }
+
     public static void main(String[] args) throws IOException {
         crawl();
     }
 
 
-    public static void crawl(){
+    public static void crawl() {
         driver = new ChromeDriver();
         for(int i = 0; i < 10; i++) {
             try {
@@ -89,11 +90,11 @@ public class TencentCrawler {
                 e.printStackTrace();
             }
         }
-            driver.quit();
+        driver.quit();
     }
     private static void downloadOriginalImg(int i, String originalUrl, Set<Cookie> cookieSet) throws IOException {
         CookieStore cookieStore = new BasicCookieStore();
-        cookieSet.forEach( c -> {
+        cookieSet.forEach(c -> {
             BasicClientCookie cookie = new BasicClientCookie(c.getName(), c.getValue());
             cookie.setPath(c.getPath());
             cookie.setDomain(c.getDomain());
@@ -136,40 +137,43 @@ public class TencentCrawler {
             }
         }
     }
+
     /**
      * 如何判定找到目标滑块位置
      * y轴上至少找到一条长度为30px的白线
+     *
      * @throws IOException
      */
     public static int calcMoveDistance(int i) throws IOException {
         BufferedImage fullBI = ImageIO.read(new File(BASE_PATH + "tencent-original" + i + ".png"));
-        for(int w = 340 ; w < fullBI.getWidth() - 18; w++){
+        for (int w = 340; w < fullBI.getWidth() - 18; w++) {
             int whiteLineLen = 0;
-            for (int h = 128; h < fullBI.getHeight() -200; h++){
+            for (int h = 128; h < fullBI.getHeight() - 200; h++) {
                 int[] fullRgb = new int[3];
-                fullRgb[0] = (fullBI.getRGB(w, h)  & 0xff0000) >> 16;
-                fullRgb[1] = (fullBI.getRGB(w, h)  & 0xff00) >> 8;
-                fullRgb[2] = (fullBI.getRGB(w, h)  & 0xff);
-                if ((Math.abs(fullRgb[0] - 0xff) + Math.abs(fullRgb[1] -0xff) + Math.abs(fullRgb[2] - 0xff)) < 40){
+                fullRgb[0] = (fullBI.getRGB(w, h) & 0xff0000) >> 16;
+                fullRgb[1] = (fullBI.getRGB(w, h) & 0xff00) >> 8;
+                fullRgb[2] = (fullBI.getRGB(w, h) & 0xff);
+                if ((Math.abs(fullRgb[0] - 0xff) + Math.abs(fullRgb[1] - 0xff) + Math.abs(fullRgb[2] - 0xff)) < 40) {
                     whiteLineLen++;
                 } else {
                     whiteLineLen = 0;
                     continue;
                 }
-                if (whiteLineLen >= 20){
+                if (whiteLineLen >= 20) {
                     System.out.println("找到缺口成功，实际缺口位置x：" + w);
-                    System.out.println("应该移动距离：" + (w/2 - START_DISTANCE));
+                    System.out.println("应该移动距离：" + (w / 2 - START_DISTANCE));
                     //网页显示大小为实际图片大小的一半
-                    return w/2 - START_DISTANCE;
+                    return w / 2 - START_DISTANCE;
                 }
             }
 
         }
         throw new RuntimeException("计算缺口位置失败");
     }
-    public static List<MoveEntity> getMoveEntity(int distance){
+
+    public static List<MoveEntity> getMoveEntity(int distance) {
         List<MoveEntity> list = new ArrayList<>();
-        for (int i = 0 ;i < distance; i++){
+        for (int i = 0; i < distance; i++) {
 
             MoveEntity moveEntity = new MoveEntity();
             moveEntity.setX(1);
@@ -179,7 +183,8 @@ public class TencentCrawler {
         }
         return list;
     }
-    static class MoveEntity{
+
+    static class MoveEntity {
         private int x;
         private int y;
         private int sleepTime;//毫秒
